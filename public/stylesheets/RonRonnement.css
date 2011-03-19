@@ -295,6 +295,8 @@ input[type='submit'] {
       margin-left: 5px;
       padding-left: 5px;
       border-left: solid 1px #a99c90; }
+      #sidebar .box li.forum span {
+        font-weight: bold; }
     #sidebar .box > a {
       display: block;
       padding-left: 5px;
@@ -344,7 +346,7 @@ input[type='submit'] {
         content: ""; }
   #site form {
     display: block;
-    background: #93877b;
+    background: #a99c90;
     padding-left: 42px;
     padding-right: 42px;
     width: 180px;
@@ -477,6 +479,10 @@ body#admin-index #container > ul,
   border: solid 1px #a99c90;
   margin-bottom: 15px;
   font-size: small; }
+
+body#dashboard-index #contents table,
+body#trackers-index #contents table {
+  display: inline-block; }
 
 /* reset pour form css, sinon une boite par css */
 #stylesheets-edit #contents > form {
@@ -673,14 +679,11 @@ footer.actions .action {
       text-decoration: inherit; }
     .content a[href]:visited {
       color: #551A8B; }
-    .content a[href][title="Définition Wikipédia"] {
-      padding-left: 3px;
-      border-left: 16px;
-      -moz-border-image: url("/images/icones/wikipedia.ico") 0 0 0 16;
-      -o-border-image: url("/images/icones/wikipedia.ico") 0 0 0 16;
-      -webkit-border-image: url("/images/icones/wikipedia.ico") 0 0 0 16;
-      -khtml-border-image: url("/images/icones/wikipedia.ico") 0 0 0 16;
-      border-image: url("/images/icones/wikipedia.ico") 0 0 0 16; }
+    .content a[href][title="Définition Wikipédia"]:after {
+      content: "\A0W";
+      font-family: serif;
+      font-size: 6pt;
+      vertical-align: super; }
     .content a[href][title="Lien interne du wiki LinuxFr.org"] {
       padding-left: 3px;
       border-left: 16px;
@@ -785,10 +788,10 @@ a.scroll {
   cursor: pointer; }
 
 /* sondage */
-ul.poll .current {
+ul.poll.current {
   padding: 0px;
   margin-top: 0px; }
-  ul.poll .current li {
+  ul.poll.current li {
     list-style: none; }
 ul.poll li meter {
   display: block;
@@ -871,6 +874,12 @@ li.comment {
     border-left: 1px solid #a99c90;
     padding-left: 5px;
     margin-bottom: 5px; }
+    li.comment .content .signature {
+      color: #999;
+      font-size: 11px; }
+      li.comment .content .signature:before {
+        white-space: pre-line;
+        content: "-- \a"; }
   li.comment > ul {
     list-style: none;
     margin-left: 1.25em;
@@ -1424,10 +1433,6 @@ body#trackers-index #contents table {
     body#trackers-index #contents table th.number {
       text-align: right;
       padding-right: 2px; }
-  body#dashboard-index #contents table .thread-new-comments,
-  body#trackers-index #contents table .thread-new-comments {
-    background: url("/images/icones/attention.png") no-repeat 2px center;
-    padding: auto 20px 2px; }
   body#dashboard-index #contents table a[href],
   body#trackers-index #contents table a[href] {
     color: #0000EE;
@@ -1439,7 +1444,7 @@ body#trackers-index #contents table {
     body#trackers-index #contents table a[href]:visited {
       color: #551A8B; }
 
-#tracker .fix a, #tracker .invalid a, .tracker .fix a, .tracker .invalid a {
+#tracker .fixed a, #tracker .invalid a, #my_trackers .fixed a, #my_trackers .invalid a, .tracker .fixed a, .tracker .invalid a {
   text-decoration: line-through; }
 
 /* page d'historique de wiki */

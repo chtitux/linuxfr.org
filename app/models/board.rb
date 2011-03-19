@@ -110,7 +110,7 @@ class Board
 
   def load(values)
     @kind       = values['kind']
-    @message    = values['msg'].html_safe
+    @message    = values['msg'].to_s.html_safe
     @user_agent = values['ua']
     @user_name  = values['user']
     @user_url   = values['url']
@@ -119,6 +119,10 @@ class Board
 
   def self.all(object_type, object_id=nil)
     limit(0, object_type, object_id)
+  end
+
+  def self.last(object_type, object_id=nil)
+    limit(1, object_type, object_id).first
   end
 
   def self.limit(max, object_type, object_id=nil)
@@ -143,7 +147,7 @@ class Board
   def viewable_by?(account)
     return false unless account
     case @object_type
-    when Board.news    then account.amr?
+    when Board.news    then news.updatable_by?(account)
     when Board.amr     then account.amr?
     when Board.writing then account.can_post_on_board?
     when Board.free    then true
@@ -153,6 +157,10 @@ class Board
 
   def creatable_by?(account)
     account.can_post_on_board? && viewable_by?(account)
+  end
+
+  def news
+    News.find(@object_id) if @object_type == Board.news
   end
 
 ### Types ###

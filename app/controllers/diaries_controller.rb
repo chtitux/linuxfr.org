@@ -5,7 +5,6 @@ class DiariesController < ApplicationController
   after_filter  :marked_as_read, :only => [:show], :if => :account_signed_in?
   after_filter  :expire_cache, :only => [:create, :update, :destroy]
   caches_page   :index, :if => Proc.new { |c| c.request.format.atom? && !c.request.ssl? }
-  caches_action :show, :unless => :account_signed_in?, :expires_in => 10.minutes
   respond_to :html, :atom
 
 ### Global ###
@@ -13,7 +12,7 @@ class DiariesController < ApplicationController
   def index
     @order = params[:order]
     @order = "created_at" unless VALID_ORDERS.include?(@order)
-    @nodes = Node.public_listing(Diary, @order).paginate(:page => params[:page], :per_page => 10)
+    @nodes = Node.public_listing(Diary, @order).page(params[:page])
     respond_with(@nodes)
   end
 
@@ -30,6 +29,7 @@ class DiariesController < ApplicationController
       redirect_to [@diary.owner, @diary], :notice => "Votre journal a bien été créé"
     else
       @diary.node = Node.new
+      @diary.valid?
       render :new
     end
   end
@@ -51,6 +51,7 @@ class DiariesController < ApplicationController
     if !preview_mode && @diary.save
       redirect_to [@user, @diary], :notice => "Votre journal a bien été modifié"
     else
+      flash.now[:alert] = "Impossible d'enregistrer ce journal" if @diary.invalid?
       render :edit
     end
   end

@@ -10,7 +10,7 @@ class NewsController < ApplicationController
   def index
     @order = params[:order]
     @order = "created_at" unless VALID_ORDERS.include?(@order)
-    @nodes = Node.public_listing(News, @order).paginate(:page => params[:page], :per_page => 10)
+    @nodes = Node.public_listing(News, @order).page(params[:page])
     respond_with(@nodes)
   end
 
@@ -18,7 +18,7 @@ class NewsController < ApplicationController
     @year  = params[:year].to_i
     @month = params[:month].to_i
     @day   = params[:day].to_i
-    @nodes = Node.public_listing(News, "created_at").published_on(Date.new(@year, @month, @day)).paginate(:page => params[:page], :per_page => 10)
+    @nodes = Node.public_listing(News, "created_at").published_on(Date.new(@year, @month, @day)).page(params[:page])
   end
 
   def show
@@ -39,6 +39,7 @@ class NewsController < ApplicationController
       redirect_to news_index_url, :notice => "Votre proposition de dépêche a bien été soumise, et sera modérée dans les heures ou jours à venir"
     else
       @news.node = Node.new
+      @news.valid?
       render :new
     end
   end

@@ -33,10 +33,13 @@ class Node < ActiveRecord::Base
   scope :by_date, order('created_at DESC')
   scope :on_dashboard, lambda {|type| public_listing(type, "created_at") }
   scope :published_on, lambda {|d| where(:created_at => (d...d+1.day)) }
+  scope :sitemap, lambda {|types| public_listing(types, "id").where("score > 0") }
   scope :public_listing, lambda {|types,order|
     types = types.to_s if types === Class
     visible.where(:content_type => types).order("#{order} DESC")
   }
+
+  paginates_per 15
 
 ### Interest ###
 
@@ -123,6 +126,14 @@ class Node < ActiveRecord::Base
     return :not_read     if r.nil?
     return :no_comments  if last_commented_at.nil?
     return :new_comments if r < last_commented_at
+    return :read
+  end
+
+  def board_status(account)
+    r = Node.last_reading(self.id, account.id) if account
+    b = Board.last(content_type, content_id)
+    return :not_read  if r.nil?
+    return :new_board if b && r < b.created_at
     return :read
   end
 

@@ -4,14 +4,17 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
   before_filter :seo_filter
-  helper_method :mobile?, :url_for_content, :path_for_content, :current_user
+  helper_method :url_for_content, :path_for_content, :current_user
 
-  VALID_ORDERS = %w(created_at score interest last_commented_at)
+  VALID_ORDERS = %w(created_at score interest last_commented_at comments_count)
+  REVISION     = `git rev-parse HEAD`.chomp
 
 protected
 
   def seo_filter
     request.session_options[:secure] = request.ssl?
+    headers["X-Served-By"] = Process.pid.to_s
+    headers["X-Revision"]  = REVISION
     @title         = %w(LinuxFr.org)
     @author        = nil
     @keywords      = %w(Linux Logiciel Libre GNU Free Software Actualité Forum Communauté)
@@ -20,10 +23,6 @@ protected
     @last_comments = Comment.footer.select([:id, :node_id, :title])
     @popular_tags  = Tag.footer.select([:name])
     @friend_sites  = FriendSite.scoped.select([:url, :title])
-  end
-
-  def mobile?
-    request.subdomains.first == 'm'
   end
 
 ### Content ###
@@ -80,5 +79,10 @@ protected
 
   def store_location!(scope)
     session[:"#{scope}_return_to"] = url_for() if request && request.get?
+  end
+
+  def handle_unverified_request
+    Rails.logger.info "CSRF protection for #{request.remote_ip}: #{form_authenticity_token} // #{params[request_forgery_protection_token]} // #{request.headers['X-CSRF-Token']}"
+    super
   end
 end

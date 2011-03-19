@@ -6,7 +6,7 @@
 #  node_id           :integer(4)
 #  user_id           :integer(4)
 #  state             :string(10)      default("published"), not null
-#  title             :string(32)      not null
+#  title             :string(160)     not null
 #  score             :integer(4)      default(0), not null
 #  answered_to_self  :boolean(1)      default(FALSE), not null
 #  materialized_path :string(1022)
@@ -31,7 +31,7 @@ class Comment < ActiveRecord::Base
 
   scope :published,    where(:state => 'published')
   scope :under,        lambda { |path| where("materialized_path LIKE ?", "#{path}_%") }
-  scope :on_dashboard, published.where(:answered_to_self => false).order('created_at DESC')
+  scope :on_dashboard, published.order('created_at DESC')
   scope :footer,       published.order('created_at DESC').limit(12)
 
   validates :title,     :presence => { :message => "Le titre est obligatoire" },
@@ -107,7 +107,7 @@ class Comment < ActiveRecord::Base
 
 ### Calculations ###
 
-  before_create :default_score
+  before_validation :default_score, :on => :create
   def default_score
     self.score = Math.log10([user.account.karma, 0.1].max).to_i - 1
   end

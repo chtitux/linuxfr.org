@@ -4,8 +4,8 @@
 #
 #  id             :integer(4)      not null, primary key
 #  forum_id       :integer(4)
-#  title          :string(64)      not null
-#  cached_slug    :string(64)
+#  title          :string(160)     not null
+#  cached_slug    :string(165)
 #  body           :text
 #  wiki_body      :text
 #  truncated_body :text
@@ -25,8 +25,6 @@ class Post < Content
   validates :title,     :presence => { :message => "Le titre est obligatoire" },
                          :length   => { :maximum => 100, :message => "Le titre est trop long" }
   validates :wiki_body, :presence => { :message => "Vous ne pouvez pas poster un journal vide" }
-
-  scope :sorted, order('created_at DESC')
 
   wikify_attr   :body
   truncate_attr :body

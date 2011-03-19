@@ -6,8 +6,8 @@
 #
 #  id           :integer(4)      not null, primary key
 #  state        :string(10)      default("draft"), not null
-#  title        :string(64)      not null
-#  cached_slug  :string(64)
+#  title        :string(160)     not null
+#  cached_slug  :string(165)
 #  moderator_id :integer(4)
 #  section_id   :integer(4)
 #  author_name  :string(32)      not null
@@ -183,11 +183,11 @@ class News < Content
 ### ACL ###
 
   def self.accept_threshold
-    Account.amr.count / 5
+    Account.amr.count / 6
   end
 
   def self.refuse_threshold
-    -Account.amr.count / 4
+    -Account.amr.count / 5
   end
 
   def viewable_by?(account)
@@ -208,7 +208,7 @@ class News < Content
   end
 
   def acceptable_by?(account)
-    account && (account.admin? || (account.moderator? && acceptable_by?))
+    account && (account.admin? || (account.moderator? && acceptable?))
   end
 
   def refusable_by?(account)

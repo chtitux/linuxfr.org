@@ -38,8 +38,9 @@ class CommentsController < ApplicationController
     @comment.default_score
     if !preview_mode && @comment.save
       flash[:notice] = "Votre commentaire a bien été posté"
-      redirect_to_content @node.content
+      redirect_to url_for_content(@node.content) + "#comment-#{@comment.id}"
     else
+      @comment.valid?
       render :new
     end
   end
@@ -55,6 +56,7 @@ class CommentsController < ApplicationController
       flash[:notice] = "Votre commentaire a bien été modifié"
       redirect_to_content @node.content
     else
+      flash.now[:alert] = "Impossible d'enregistrer ce commentaire" if @comment.invalid?
       render :edit
     end
   end

@@ -60,7 +60,7 @@ module NodeHelper
   def paginated_section(args, link=nil, &block)
     toolbox    = link ? content_tag(:div, link, :class => 'new_content') : ''.html_safe
     order_bar  = render 'shared/order_navbar'
-    pagination = will_paginate(args).to_s
+    pagination = paginate(args, :inner_window => 10).to_s
     before = content_tag(:nav, toolbox + order_bar + pagination, :class => "toolbox")
     after  = content_tag(:nav, pagination, :class => "toolbox")
     ContentPresenter.collection do
@@ -96,7 +96,7 @@ module NodeHelper
 
   def read_it(content)
     link = link_to_unless_current("Lire la suite", path_for_content(content)) { "" }
-    nb_comments = pluralize(content.node.try(:comments_count), "commentaire")
+    nb_comments = content_tag(:span, pluralize(content.node.try(:comments_count), "commentaire"), :class => "nb_comments")
     if current_account
       status = content.node.read_status(current_account)
       visit  = case status
@@ -104,6 +104,7 @@ module NodeHelper
                when :new_comments then ", Nouveaux !"
                else                    ", déjà visité"
                end
+      visit  = content_tag(:span, visit, :class => "visit")
     else
       status = "anonymous_reader"
     end

@@ -1,4 +1,3 @@
-- preview.wikify_body
 %ul
   %li#comment_new.comment.score1
     %h2
@@ -11,6 +10,8 @@
       = avatar_url(current_user)
     .content
       = preview.body
+      %p.signature
+        = current_user.signature
     %footer.actions
       &nbsp;
 

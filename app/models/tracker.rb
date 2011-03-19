@@ -6,8 +6,8 @@
 #
 #  id                  :integer(4)      not null, primary key
 #  state               :string(10)      default("opened"), not null
-#  title               :string(64)      not null
-#  cached_slug         :string(64)
+#  title               :string(100)     not null
+#  cached_slug         :string(105)
 #  category_id         :integer(4)
 #  assigned_to_user_id :integer(4)
 #  body                :text
@@ -31,7 +31,6 @@ class Tracker < Content
                         :length   => { :maximum => 100, :message => "Le titre est trop long" }
   validates :wiki_body, :presence => { :message => "Veuillez décrire cette entrée du suivi" }
 
-  scope :sorted, order("created_at DESC")
   scope :opened, where(:state => "opened")
 
   wikify_attr   :body
@@ -83,7 +82,7 @@ class Tracker < Content
   end
 
   def updatable_by?(account)
-    account && (account.moderator? || account.admin?)
+    account && (account.moderator? || account.admin? || account.user_id == node.user_id)
   end
 
   def destroyable_by?(account)

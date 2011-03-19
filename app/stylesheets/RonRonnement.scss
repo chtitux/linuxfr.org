@@ -259,6 +259,7 @@ input[type='submit'] {
 			margin-left: 5px;
 			padding-left: 5px;
 			border-left: solid 1px $C_INTER;
+			&.forum span { font-weight: bold; }
 		}
 
 		> a {
@@ -340,7 +341,7 @@ input[type='submit'] {
 			visibility: hidden; /* TODO la recherche ne marche pas avec opera */
 		}
 		display: block;
-		background: $C_FONCE;
+		background: $C_INTER;
 		padding-left: $PX_SITE_PAD_DROIT;
 		padding-right: $PX_SITE_PAD_DROIT;
 		width: 180px;
@@ -532,6 +533,10 @@ body#admin-index #container > ul,
 
 	margin-bottom: 15px;
 	font-size: small;
+}
+body#dashboard-index #contents table,
+body#trackers-index #contents table {
+    display: inline-block;
 }
 /* reset pour form css, sinon une boite par css */
 #stylesheets-edit #contents > form {
@@ -758,6 +763,7 @@ footer.actions .action {
 			color: $C_INTER;
 			border-style: none;
 			background-color: transparent;
+			cursor: pointer;
 		}
 		div:hover {
 			text-decoration: underline;
@@ -774,14 +780,11 @@ footer.actions .action {
 	}
 	a[href] {
 		@include lien_standard;
-		&[title="Définition Wikipédia"] {
-			padding-left: 3px;
-			border-left: 16px;
-			-moz-border-image:    url('/images/icones/wikipedia.ico') 0 0 0 16;
-			-o-border-image:      url('/images/icones/wikipedia.ico') 0 0 0 16;
-			-webkit-border-image: url('/images/icones/wikipedia.ico') 0 0 0 16;
-			-khtml-border-image:  url('/images/icones/wikipedia.ico') 0 0 0 16;
-			border-image:         url('/images/icones/wikipedia.ico') 0 0 0 16;
+		&[title="Définition Wikipédia"]:after {
+			content: "\A0W";
+			font-family: serif;			
+			font-size: 6pt;
+			vertical-align: super;
 		}
 		&[title="Lien interne du wiki LinuxFr.org"] {
 			padding-left: 3px;
@@ -906,7 +909,7 @@ a.scroll {
 
 /* sondage */
 ul.poll {
-	.current {
+	&.current {
 		padding: 0px;
 		margin-top: 0px;
 		li {
@@ -1004,6 +1007,14 @@ li.comment {
 		border-left: 1px solid $C_INTER;
 		padding-left: 5px;
 		margin-bottom: 5px;
+		.signature {
+			color: #999;
+			font-size: 11px;
+			&:before {
+				white-space: pre-line;
+				content: "-- \a";
+			}
+		}
 	}
 	> ul {
 		list-style: none;
@@ -1413,14 +1424,10 @@ body#trackers-index #contents table {
 		&.date { white-space: nowrap; }
 		&.number { text-align: right; padding-right: 2px; }
 	}
-	.thread-new-comments {
-		background: url("/images/icones/attention.png") no-repeat 2px center;
-		padding: auto 20px 2px;
-	}
 	a[href] { @include lien_standard; }
 }
-#tracker, .tracker {
-	.fix, .invalid {
+#tracker, #my_trackers, .tracker {
+	.fixed, .invalid {
 		a {
 			text-decoration: line-through;
 		}

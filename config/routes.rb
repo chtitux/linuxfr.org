@@ -89,6 +89,7 @@ LinuxfrOrg::Application.routes.draw do
     resources :news, :except => [:new, :destroy] do
       post :submit, :on => :member
       resources :links, :only => [:new]
+      resources :paragraphs, :only => [:create]
     end
     resources :links, :only => [:create, :edit, :update]
     resources :paragraphs, :only => [:show, :edit, :update]
@@ -110,7 +111,8 @@ LinuxfrOrg::Application.routes.draw do
   end
 
   # Admin
-  get "/admin" => "admin#index"
+  get "/admin"       => "admin#index"
+  get "/admin/debug" => "admin#debug"
   namespace :admin do
     resources :comptes, :controller => "accounts", :as => "accounts", :only => [:index, :update, :destroy]
     resources :reponses, :controller => "responses", :as => "responses", :except => [:show]

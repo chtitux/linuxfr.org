@@ -3,7 +3,7 @@ source :rubygems
 gem "rails",                   "=3.0.5"
 
 gem "acts_as_list",            "~>0.1"
-gem "albino",                  "=1.1.1"
+gem "albino",                  "~>1.3"
 gem "bitfields",               "~>0.3"
 gem "canable",                 "~>0.1"
 gem "carrierwave",             "~>0.5"
@@ -14,19 +14,19 @@ gem "haml",                    "~>3.0"
 gem "html_truncator",          "~>0.2"
 gem "htmlentities",            "~>4.2"
 gem "jammit",                  "~>0.5"
+gem "kaminari",                "~>0.10"
 gem "mini_magick",             "~>3.2"
 gem "mysql2",                  "~>0.2"
 gem "nokogiri",                "~>1.4"
 gem "rdiscount",               "~>1.6"
 gem "redis",                   "~>2.1"
 gem "sanitize",                "~>2.0"
-gem "sitemap_generator",       "~>1.3"
+gem "sitemap_generator",       "~>1.4"
 gem "simple_autocomplete",     "~>0.3"
 gem "state_machine",           "~>0.9"
 # TODO Rails3
 # gem "thinking-sphinx",       "~>1.3", :require => "thinking_sphinx"
 # gem "ts-datetime-delta",     "~>1.0", :require => "thinking_sphinx/deltas/datetime_delta"
-gem "will_paginate",           ">=3.0.pre2"
 
 # Rspec-rails must be in development for rake stats and in test for normal stuff
 group :development, :test do

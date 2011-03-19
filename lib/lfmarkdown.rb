@@ -21,7 +21,7 @@ class LFMarkdown < Markdown
     @filter_html   = true
     @autolink      = true
     @codemap       = {}
-    @generate_toc  = text.length > 10_000
+    @generate_toc  = text.length > 12_000
     super(text.dup, *extensions)
   end
 
@@ -45,6 +45,7 @@ protected
 
   # Code taken from http://github.com/github-flavored-markdown/
   def process_newlines
+    @text.gsub!("\r", "")
     @text.gsub!(/(\A|^$\n)(^\w[^\n]*\n)(^\w[^\n]*$)+/m) do |x|
       x.gsub(/^(.+)$/, "\\1  ")
     end
